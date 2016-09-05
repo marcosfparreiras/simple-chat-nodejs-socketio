@@ -27,6 +27,7 @@
       var socket = io();
       $('form').submit(function(){
         var msg = {
+          type: 'user-message',
           text: $('#m').val(),
           user: $('#name').val()
         }
@@ -35,7 +36,13 @@
         return false;
       });
       socket.on('chat message', function(msg){
-        var line = msg.user + ': ' + msg.text;
+        var line = '';
+        if(msg.type == 'user-message') {
+          line = msg.user + ': ' + msg.text;
+        }
+        else if(msg.type == 'system-message') {
+          line = msg.text;
+        }
         $('#messages').append($('<li>').text(line));
       });
     </script>

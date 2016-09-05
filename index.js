@@ -7,12 +7,22 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.broadcast.emit('chat message', 'user joined the room');
+  var joined_message = {
+    type: 'system-message',
+    text: 'user joined the room',
+  }
+  socket.broadcast.emit('chat message', joined_message);
+
   socket.on('chat message', function(msg){
     socket.broadcast.emit('chat message', msg);
   });
+
   socket.on('disconnect', function(){
-    socket.broadcast.emit('chat message', 'user left the room');
+    var left_message = {
+      type: 'system-message',
+      text: 'user left the room',
+    }
+    socket.broadcast.emit('chat message', left_message);
   });
 });
 
